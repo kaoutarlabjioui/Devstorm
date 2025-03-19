@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_name');
             $table->string('pin');
-            $table->foreignId('jurie_id')->constrainted('juries')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('jurie_id')->constrainted('juries')->onUpdate('cascade');
             $table->timestamps();
         });
     }

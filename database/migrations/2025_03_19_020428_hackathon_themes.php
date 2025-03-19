@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('hackathon_themes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('theme_id')->constrained('themes')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('theme_id')->constrained('themes')->onUpdate('cascade');
+            $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade');
             $table->timestamps();
         });
     }

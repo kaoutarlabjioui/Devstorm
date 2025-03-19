@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('jurie_id')->constrained('juries')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade');
+            $table->foreignId('jurie_id')->constrained('juries')->onUpdate('cascade');
             $table->foreignId('project_id')->constrained('projects')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
