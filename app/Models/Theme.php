@@ -16,7 +16,10 @@ class Theme extends Model
         return $this->belongsTo(Hackathon::class);
     }
 
-
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
 
 
 }

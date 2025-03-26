@@ -57,4 +57,18 @@ public function getJWTCustomClaims()
     return [];
 }
 
+public function isParticipant()
+{
+    return $this->role->role_name === "participant";
+}
+
+public function isAdmin()
+{
+    return $this->role->role_name === 'admin';
+}
+
+public function isOrganisateur(){
+    return $this->role->role_name === 'organisateur';
+}
+
 }

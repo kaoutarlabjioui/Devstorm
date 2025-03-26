@@ -30,14 +30,14 @@ class AuthController extends Controller
                      ]);
 
 
-            $roleName = $request->role ? $request->role : 'user';
+            $roleName = $request->role ? $request->role : 'participant';
             $role = Role::where('role_name', $roleName)->first();
-            
+
                 // return ['role'=>$role,"role name "=>$request->role];
-                //         if (!$role) {
-                //             $role = Role::create([
-                //                 'role_name' => $roleName,
-                //             ]);
+                        if (!$role) {
+                            $role = Role::create([
+                                'role_name' => $roleName,
+                            ]);}
 
     if (!$role) {
         return response()->json(['error' => 'Rôle non valide'], 400);

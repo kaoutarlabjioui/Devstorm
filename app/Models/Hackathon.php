@@ -14,13 +14,12 @@ class Hackathon extends Model
     public function teams() {
         return $this->hasMany(Team::class);
     }
-
-    public function themes(){
+    public function themes()
+    {
         return $this->hasMany(Theme::class);
     }
-
     public function rules(){
-        return $this->belongsToMany(Theme::class);
+        return $this->belongsToMany(Rule::class);
     }
 
     public function users(){

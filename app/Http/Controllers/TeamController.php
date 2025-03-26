@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Hackathon;
 use App\Models\Team;
+use App\Models\Theme;
 use Exception;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -13,6 +15,11 @@ class TeamController extends Controller
 {
     public function registerTeam(Request $request, $id)
     {
+
+        Gate::allows('isParticipant');
+        // if (!Gate::allows('isParticipant')) {
+        //     return response()->json(['error' => 'You do not have permission to register a team.'], 403);
+        // }
         try {
             $hackathon = Hackathon::findOrfail($id);
 
@@ -26,9 +33,16 @@ class TeamController extends Controller
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
-            $request->Validate([
+            $theme = Theme::where('name',$request->project_name)->first();
+            // return ['message'=>$theme];
+            if(!$theme){
+                return response()->json(['error'=> 'theme not found'],404);
+            }
+
+
+            $request->validate([
                 'name' => 'required|string|max:255',
-                'github_link' => 'required|url|max:255',
+                // 'github_link' => 'required|url|max:255',
             ]);
 
 
@@ -36,7 +50,10 @@ class TeamController extends Controller
             $team->name = $request->name;
             $team->github_link = $request->github_link;
             $team->hackathon()->associate($hackathon);
-            $team->status = 'rejected';
+            // $team->users()->associate($user);
+            $team->project=$theme->name;
+            $team->status = 'pending';
+            $team->score = 0;
             $team->save();
 
             return response()->json($team, 201);

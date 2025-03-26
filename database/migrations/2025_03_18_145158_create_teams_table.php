@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('github_link');
+            $table->string('status');
             $table->float('score');
             $table->string('project');
             $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('theme_id')->nullable()->constrained('themes')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('jury_id')->nullable()->constrained('juries')->onUpdate('cascade')->nullOnDelete();
             $table->foreignId('jury_noted_id')->nullable()->constrained('juries')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();

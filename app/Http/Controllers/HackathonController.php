@@ -15,14 +15,15 @@ class HackathonController extends Controller
         return response()->json(Hackathon::all());
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
-           $request->validate([
-            'date'=>'required|date|date_format:Y-m-d',
-            'place'=>'required',
+        $request->validate([
+            'date' => 'required|date|date_format:Y-m-d',
+            'place' => 'required',
             'themes' => 'required|array',
             'rules' => 'required|array',
-           ]);
+        ]);
 
 
         $hackathon = new Hackathon();
@@ -30,37 +31,39 @@ class HackathonController extends Controller
         $hackathon->date = $request->date;
         $hackathon->place = $request->place;
         $hackathon->save();
-           $themes = $request->input(['themes']);
-           foreach($themes as $name){
-            $theme = Theme::firstOrCreate(['name'=>$name],
-            ['description' => 'Default description']);
+        $themes = $request->input(['themes']);
+        foreach ($themes as $name) {
+            $theme = Theme::firstOrCreate(
+                ['name' => $name],
+                ['description' => 'Default description']
+            );
             if ($theme) {
                 $theme->hackathon()->associate($hackathon);
                 $theme->save();
             }
             // $theme->hackathon()->associate($hackathon);
             // $theme->save();
-           }
+        }
 
-           $rules = $request->input(['rules']);
-           foreach($rules as $rule_name ){
+        $rules = $request->input(['rules']);
+        foreach ($rules as $rule_name) {
             $rule = Rule::firstOrCreate(['name' => $rule_name]);;
             $rule->hackathons()->attach($hackathon);
+        }
+        // return response()->json([
+        //     'message' => 'hackaton created successfully',
+        //     'hackathon' => $hackathon
+        // ]);
 
-           }
-
-
-
+        // $hackathon->with(['rules'])->get();
 
         return response()->json([
-            'message'=>'hackaton created successfully',
-            'hackathon'=>$hackathon->load('themes','rules')
+            'message' => 'hackaton created successfully',
+            'hackathon' => $hackathon->load('themes','rules')
         ]);
-
-
     }
 
-    public function update(Request $request , Hackathon $hackathon)
+    public function update(Request $request, Hackathon $hackathon)
     {
         $request->validate([
             'date' => 'required|date_format:Y-m-d',
@@ -77,30 +80,22 @@ class HackathonController extends Controller
                 $theme->hackathon()->associate($hackathon);
                 $theme->save();
             }
-
         }
 
 
         if ($request->has('rules')) {
             $existingRules = $hackathon->rules->pluck('name');
             $newRules = collect($request->rules);
-            $rulesRemove =$existingRules->diff($newRules);
+            $rulesRemove = $existingRules->diff($newRules);
             $rulesAdd = $newRules->diff($existingRules);
-
-
-
-
+        }
     }
 
-}
-
-public function destroy(Hackathon $hackathon){
+    public function destroy(Hackathon $hackathon)
+    {
 
 
         $hackathon->delete();
         return response()->json(['message' => 'Hackathon deleted successfully']);
-
-}
-
-
+    }
 }

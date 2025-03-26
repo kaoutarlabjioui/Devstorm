@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HackathonController;
 use App\Http\Controllers\JuryMemberController;
 use App\Http\Controllers\RuleController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,3 +36,4 @@ Route::post('/jurymembers',[JuryMemberController::class,'store']);
 Route::post('/hackathon',[HackathonController::class , 'store']);
 
 
+Route::post('/hackathon/{id}/registerteams',[TeamController::class,'registerTeam'])->middleware(['can:isParticipant']);
