@@ -16,7 +16,7 @@ class Hackathon extends Model
     }
 
     public function themes(){
-        return $this->belongsToMany(Theme::class);
+        return $this->hasMany(Theme::class);
     }
 
     public function rules(){

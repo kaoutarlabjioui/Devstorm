@@ -9,7 +9,7 @@ class JuryMember extends Model
 {
     use HasFactory;
 
-    protected $fillable =['user_name','pin'];
+    protected $fillable =['username','pin'];
 
 
     public function note(){

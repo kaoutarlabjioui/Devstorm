@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->float('value');
-            $table->foreignId('jury_member_id')->constrained('jury_members')->onUpdate('cascade');
-            $table->foreignId('team_id')->constrained('teams')->onUpdate('cascade');
+            $table->foreignId('jury_member_id')->nullable()->constrained('jury_members')->onUpdate('cascade')->nullOnDelete();
+            $table->foreignId('team_id')->nullable()->constrained('teams')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();
         });
     }

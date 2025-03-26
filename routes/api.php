@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HackathonController;
+use App\Http\Controllers\JuryMemberController;
+use App\Http\Controllers\RuleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +29,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware("jwtAuth")
 Route::post('/refresh', [AuthController::class, 'refresh'])->middleware("jwtAuth");
 Route::get('/user-profile', [AuthController::class, 'getUser'])->middleware("jwtAuth");
 
+Route::post('/storerule', [RuleController::class, 'store']);
+Route::delete('/deleterule', [RuleController::class, 'destroy']);
+Route::post('/jurymembers',[JuryMemberController::class,'store']);
+Route::post('/hackathon',[HackathonController::class , 'store']);
 
 

@@ -16,9 +16,12 @@ return new class extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade');
-            $table->foreignId('jurie_id')->constrained('juries')->onUpdate('cascade');
-            $table->foreignId('project_id')->constrained('projects')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('github_link');
+            $table->float('score');
+            $table->string('project');
+            $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('jury_id')->nullable()->constrained('juries')->onUpdate('cascade')->nullOnDelete();
+            $table->foreignId('jury_noted_id')->nullable()->constrained('juries')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();
         });
     }

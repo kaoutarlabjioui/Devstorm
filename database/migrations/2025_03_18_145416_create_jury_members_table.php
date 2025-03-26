@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jury_members', function (Blueprint $table) {
+        Schema::create('Jury_members', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name');
+            $table->string('username');
             $table->string('pin');
-            $table->foreignId('jurie_id')->constrainted('juries')->onUpdate('cascade');
+            $table->foreignId('jury_id')->nullable()->constrainted('juries')->onUpdate('cascade')->nullOnDelete();
             $table->timestamps();
         });
     }

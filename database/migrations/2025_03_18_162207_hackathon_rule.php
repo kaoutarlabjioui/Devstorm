@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('team_id')->nullable()->constrained('teams')->onUpdate('cascade')->nullOnDelete();
+        Schema::create('hackathon_rule', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('rule_id')->constrained('rules')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('hackathon_id')->constrained('hackathons')->onUpdate('cascade')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

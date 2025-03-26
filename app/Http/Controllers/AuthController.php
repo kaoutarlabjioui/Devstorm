@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
-use Validator;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -22,28 +20,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
-         $validator = FacadesValidator::make($request->all(),
+         $request->validate(
                       [
                       'name' => 'required',
                       'email' => 'required|email',
                       'password' => 'required',
-                      'role' => 'nullable|exists:roles,name',
+                      'role' => 'required|string',
 
                      ]);
 
-         if ($validator->fails()) {
-
-               return response()->json(['error'=>$validator->errors()], 401);
-
-            }
 
             $roleName = $request->role ? $request->role : 'user';
             $role = Role::where('role_name', $roleName)->first();
-
-            if (!$role) {
-                $role = Role::create([
-                    'role_name' => $roleName,
-                ]);
+            
+                // return ['role'=>$role,"role name "=>$request->role];
+                //         if (!$role) {
+                //             $role = Role::create([
+                //                 'role_name' => $roleName,
+                //             ]);
 
     if (!$role) {
         return response()->json(['error' => 'Rôle non valide'], 400);
@@ -54,23 +48,24 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->role_id = $role->id;
+        // $user->role_id = $role->id;
+        $user->role()->associate($role);
         $user->save();
 
+        $user->load('role');
+        // return ['user'=>$user];
 
-
-
-
-        if ($this->token) {
-            return $this->login($request);
-        }
-
+        // if ($this->token) {
+        //     return $this->login($request);
+        // }
+          $token=Auth::login($user);
         return response()->json([
             'success' => true,
-            'data' => $user
+            'token' => $token,
+            'data' => $user,
         ], Response::HTTP_OK);
     }
-    }
+
     public function login(Request $request)
     {
         $input = $request->only('email', 'password');
