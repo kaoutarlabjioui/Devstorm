@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JuryMember extends Model
+use Tymon\JWTAuth\Contracts\JWTSubject;
+class JuryMember extends Model implements JWTSubject
 {
     use HasFactory;
 
@@ -19,4 +21,15 @@ class JuryMember extends Model
     public function jury(){
         return $this->belongsTo(Jury::class);
     }
+
+    public function getJWTIdentifier()
+{
+    return $this->getKey();
+}
+
+public function getJWTCustomClaims()
+{
+    return [];
+}
+
 }

@@ -40,3 +40,4 @@ Route::post('/hackathon',[HackathonController::class , 'store']);
 Route::post('/team/{id}/registerteams',[TeamController::class,'registerTeam'])->middleware(["jwtAuth",'can:isParticipant']);
 Route::post('/approveteams',[TeamController::class,'approveTeam'])->middleware(["jwtAuth",'can:isAdmin']);
 Route::post('/addroles',[RoleController::class , 'store'])->middleware(['jwtAuth','can:isAdmin']);
+Route::post('/jury/login', [JuryMemberController::class, 'login']);
