@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HackathonController;
 use App\Http\Controllers\JuryMemberController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Http\Request;
@@ -32,8 +33,10 @@ Route::get('/user-profile', [AuthController::class, 'getUser'])->middleware("jwt
 
 Route::post('/storerule', [RuleController::class, 'store']);
 Route::delete('/deleterule', [RuleController::class, 'destroy']);
-Route::post('/jurymembers',[JuryMemberController::class,'store']);
+Route::post('/jurymembers',[JuryMemberController::class,'store'])->middleware(['jwtAuth','can:isAdmin']);
 Route::post('/hackathon',[HackathonController::class , 'store']);
 
 
-Route::post('/hackathon/{id}/registerteams',[TeamController::class,'registerTeam'])->middleware(['can:isParticipant']);
+Route::post('/team/{id}/registerteams',[TeamController::class,'registerTeam'])->middleware(["jwtAuth",'can:isParticipant']);
+Route::post('/approveteams',[TeamController::class,'approveTeam'])->middleware(["jwtAuth",'can:isAdmin']);
+Route::post('/addroles',[RoleController::class , 'store'])->middleware(['jwtAuth','can:isAdmin']);

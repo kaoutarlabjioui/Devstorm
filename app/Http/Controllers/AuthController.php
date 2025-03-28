@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Gate;
 
 class AuthController extends Controller
 {
@@ -114,6 +115,40 @@ class AuthController extends Controller
             return response()->json(['success'=>false,'message'=>'something went wrong']);
         }
     }
+    public function updateRole(Request $request)
+    {
+        if (!Gate::allows('isAdmin')) {
+            return response()->json(['error' => 'Access denied'], 403);
+        }
+
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'role_name' => 'required|exists:roles,role_name',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'Utilisateur non trouvé'], 404);
+        }
+
+        $role = Role::where('role_name', $request->role_name)->first();
+
+        if (!$role) {
+            return response()->json(['error' => 'Rôle non trouvé'], 404);
+        }
+
+        $user->role()->associate($role);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Rôle mis à jour avec succès',
+            'user' => $user,
+        ]);
+    }
+
+
 }
 
 

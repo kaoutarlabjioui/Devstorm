@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -12,6 +13,9 @@ class RoleController extends Controller
     }
 
     public function store(Request $request){
+
+
+        Gate::allows('isAdmin');
         Role::create([
             'role_name' => $request['role_name'],
         ]);
